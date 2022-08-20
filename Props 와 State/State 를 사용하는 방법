@@ -1,0 +1,49 @@
+// State는 자기자신이 들고있는 값이고 내부에서 변경이 가능하다
+
+import React, { Component } from "react";
+
+class Counter extends Component {
+  state = {
+    number: 0
+  };
+
+  // constructor(props) {
+  //   super(props);
+  //   this.handleIncrease = this.handleIncrease.bind(this);
+  //   this.handleDecrease = this.handleDecrease.bind(this);
+  // }
+
+  // 이렇게 사용하면 안됨 (this가 뭔지 모른다. 아니면 위처럼 해야 this를 알수있다.)
+  // handleDecrease() {
+  //   console.log(this);
+  //   this.setState ({
+  //     number: this.state.number  + 1
+  //   })
+  // }
+
+
+  handleIncrease = () => {
+    this.setState({
+      number: this.state.number + 1
+    });
+  };
+
+  handleDecrease = () => {
+    this.setState({
+      number: this.state.number - 1
+    });
+  };
+
+  render() {
+    return (
+      <div>
+        <h1>카운터</h1>
+        <div>값 : {this.state.number}</div>
+        <button onClick={this.handleIncrease}>+</button>
+        <button onClick={this.handleDecrease}>-</button>
+      </div>
+    );
+  }
+}
+
+export default Counter;
