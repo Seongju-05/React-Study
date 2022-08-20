@@ -10,7 +10,7 @@ class App extends Component {
     );
   }
 }
-
+export  default App;
 
 // Fragment로도 감싸줄수 있음 (불 필요한 div가 사라짐) 
 import React, { Component, Fragment } from 'react';
@@ -25,3 +25,4 @@ class App extends Component {
     );
   }
 }
+export  default App;
