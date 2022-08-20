@@ -1,0 +1,62 @@
+// JSX 안에 자바스크립트 값 사용하기
+
+import React, { Component } from 'react';
+
+class App extends Component {
+  render() {
+    const name = '김성주';
+    return (
+      <div>
+        환영합니다 {name}!
+      </div>
+    );
+  }
+  }
+
+export  default App;
+
+
+// 삼항 연산자 알아보기
+
+// 예제 1
+import React, { Component } from 'react';
+
+class App extends Component {
+  render() {
+    return (
+      <div>
+        {
+        1 + 1 === 2
+        ? '맞다'
+        : '틀리다!'
+        }
+      </div>
+    );
+  }
+  }
+
+export  default App;
+
+
+// 예제 2
+import React, { Component } from 'react';
+
+class App extends Component {
+  render() {
+    const value = 1;
+    return (
+      <div>
+        {
+        (function() {
+          if(value === 1) return <div>1이다.</div>
+          if(value === 2) return <div>2이다.</div>
+          if(value === 3) return <div>3이다.</div>
+          return <div>없다</div>
+        })()
+        }
+      </div>
+    );
+  }
+  }
+
+export  default App;
