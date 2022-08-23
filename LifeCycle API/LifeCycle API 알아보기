@@ -98,3 +98,76 @@ return null; // null을 리턴하면 따로 업데이트 할 것은 없다 라�
 */
 
 
+import React, { Component } from "react";
+import Mycomponent from "./Mycomponent";
+
+class App extends Component {
+  state = {
+    counter: 1,
+  };
+
+  constructor(props) {
+    super(props);
+    console.log("constructor");
+  }
+
+  componentDidMount() {
+    console.log("componentDidMount");
+  }
+
+  handleClick = () => {
+    this.setState({
+      counter: this.state.counter + 1,
+    });
+  };
+
+  render() {
+    return (
+      <div>
+        <Mycomponent value={this.state.counter} />
+        <button onClick={this.handleClick}>Click</button>
+      </div>
+    );
+  }
+}
+export default API1;
+
+import React, { Component } from "react";
+
+class Mycomponent extends Component {
+  state = {
+    value: 0,
+  };
+
+  static getDerivedStateFromProps(nextProps, prevState) {
+    if (prevState.value !== nextProps.value) {
+      return {
+        value: nextProps.value,
+      };
+    }
+    return null;
+  }
+
+  render() {
+    return (
+      <div>
+        <p>props: {this.props.value}</p>
+        <p>state: {this.state.value}</p>
+      </div>
+    );
+  }
+}
+export default Mycomponent;
+
+
+// shouldComponentUpdate
+// 이 API는 컴포넌트를 최적화하는 작업에서 매우 유용하게 사용된다.
+// shouldComponentUpdate는 특정 조건에 따라 랜더링을 막아줄 수 있는 함수이다.
+
+// 방법
+shouldComponentUpdate (newxtProps, nextState) {
+// return false 하면 업데이트를 안함
+// return this.props.checkde !== nextProps.checked
+return true;
+
+}
