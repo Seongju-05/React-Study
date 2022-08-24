@@ -1,0 +1,223 @@
+// getSnapshotBeforeUpdate()
+// 이 API가 발생하는 시전은 다음과 같다.
+// 1. render()  2. getSnapshotBeforeUpdate()  3. 실제 DOM에 변화 발생  4. componentDidUpdate
+// 이 API를 통해서, DOM 변화가 일어나기 직전의 DOM상태를 리턴시켜 componentDidUpdate에서 받아올 수 있다.
+
+// 방법 : 
+getSnapshotBeforeUpdate(prevProps, prevState) {
+
+// DOM 업데이트가 일어나기 직전의 시점이다.
+// 새 데이터가 상단에 추가되어도 스크롤바를 유지할 수 있다.
+// scrollHeight는 전 후를 비교해서 스크롤 위치를 설정하기 위함이고,
+// scrollTop은, 이 기능이 크롬에 이미 구현이 되어있는데, 이미 구현이 되어있다면 처리하지 않도록 하기 위함이다.
+
+if(prevState.array !== this.state.array) {
+  const {
+    scrollTop, scrollHeight
+  } = this.list;
+
+// 여기서 반환하는 값은 componentDidMount에서 snapshot 값으로 받아올 수 있다.
+  return {
+    scrollTop,scrollHeight
+    };
+  }
+}
+
+// somponentDidUpdate
+// 이 API는 컴포넌트에서 render()을 호출하고 난 다음에 발생하게 된다.
+
+// 방법 : 
+
+componentDidUpdate(prevProps, prevState, snapshot) {
+
+}
+
+componentDidUpdate(prevProps, prevState, snapshot) {
+  if (snapshot) {
+  const {scrollTop } = this.list;
+  if (scrollTop !== snapshot.scrollTop) return ; // 기능이 이미 구현되어있다면 
+  const diff = this.list.scrollHeight - snapshot.scrollHeight;
+  this.list.scrollTop += diff;
+  }
+}
+
+import React, { Component } from "react";
+
+class Mycomponent extends Component {
+  state = {
+    value: 0,
+  };
+
+  static getDerivedStateFromProps(nextProps, prevState) {
+    if (prevState.value !== nextProps.value) {
+      return {
+        value: nextProps.value,
+      };
+    }
+    return null;
+  }
+
+  shouldComponentUpdate(nextProps, nextState) {
+    if(nextProps.value === 10) return false;
+    return true; 
+  }
+
+  componentDidUpdate(prevProps, prevState) {
+    if(this.props.value !==  prevProps.value) {
+        console.log('값이 바뀌었다!',this.props.value);
+    }
+}
+
+  render() {
+    return (
+      <div>
+        <p>props: {this.props.value}</p>
+        <p>state: {this.state.value}</p>
+      </div>
+    );
+  }
+}
+export default Mycomponent;
+
+
+// componentWillUnmount
+// 컴포넌트 제거
+// 여기서는 주로 등록했었던 이벤트를 제거한다.
+
+// 방법 : 
+componentWillUnmount() {
+ // 이벤트, setTimeout, 외부 라이브러리 인스턴스 제거
+}
+
+import React, { Component } from "react";
+
+class Mycomponent extends Component {
+  state = {
+    value: 0,
+  };
+
+  static getDerivedStateFromProps(nextProps, prevState) {
+    if (prevState.value !== nextProps.value) {
+      return {
+        value: nextProps.value,
+      };
+    }
+    return null;
+  }
+
+  shouldComponentUpdate(nextProps, nextState) {
+    if (nextProps.value === 10) return false;
+    return true;
+  }
+
+  componentDidUpdate(prevProps, prevState) {
+    if (this.props.value !== prevProps.value) {
+      console.log("값이 바뀌었다!", this.props.value);
+    }
+  }
+
+  componentWillUnmount() {
+    console.log("Good Bye");
+  }
+
+  render() {
+    return (
+      <div>
+        <p>props: {this.props.value}</p>
+        <p>state: {this.state.value}</p>
+      </div>
+    );
+  }
+}
+export default Mycomponent;
+
+
+import React, { Component } from "react";
+import Mycomponent from "./Mycomponent";
+
+class App extends Component {
+  state = {
+    counter: 1,
+  };
+
+  constructor(props) {
+    super(props);
+    console.log("constructor");
+  }
+
+  componentDidMount() {
+    console.log("componentDidMount");
+  }
+
+  handleClick = () => {
+    this.setState({
+      counter: this.state.counter + 1,
+    });
+  };
+
+  render() {
+    return (
+      <div>
+        {this.state.counter < 10 && <Mycomponent value={this.state.counter} />}
+        <button onClick={this.handleClick}>Click</button>
+      </div>
+    );
+  }
+}
+export default API1;
+
+// componentDidCatch
+// render 함수에서 에러가 발생한다면, 리액트 앱이 크래쉬 되어버린다.
+
+// 방법 : 
+componentDidCatch(error, into) {
+  this.setState({
+  error: true
+  });
+}
+
+import React, { Component } from "react";
+import Mycomponent from "./Mycomponent";
+
+class App extends Component {
+  state = {
+    counter: 1,
+    error: false,
+  };
+
+  componentDidCatch(error, info) {
+    this.setState({
+      error: true,
+    });
+    // API를 통해서 서버로 오류 내용 날리기
+  }
+
+  constructor(props) {
+    super(props);
+    console.log("constructor");
+  }
+
+  componentDidMount() {
+    console.log("componentDidMount");
+  }
+
+  handleClick = () => {
+    this.setState({
+      counter: this.state.counter + 1,
+    });
+  };
+
+  render() {
+    if (this.state.error) {
+      return <div>에러가 났어요!</div>;
+    }
+    return (
+      <div>
+        {this.state.counter < 10 && <Mycomponent value={this.state.counter} />}
+        <button onClick={this.handleClick}>Click</button>
+      </div>
+    );
+  }
+}
+export default API1;
+
